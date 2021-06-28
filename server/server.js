@@ -1,51 +1,36 @@
 require('./config/config');
 
+
 const express = require('express');
+const mongoose = require('mongoose');
+
+
+
 const app = express();
+
+
 const bodyParser = require('body-parser');
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // parse application/json
-app.use(bodyParser.json())
+app.use(bodyParser.json());
+
+app.use(require('./routes/usuario'));
+
+const MONGODB_URI = process.env.URLDB
+mongoose.set('useCreateIndex', true);
+mongoose.connect(MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+
+.then(db => console.log('database is connected'))
+
+.catch(err => console.log(err));
 
 
-app.get('/usuario', function(req, res) {
-    res.json('get usurio');
-});
-app.post('/usuario', function(req, res) {
-    let body = req.body;
-
-    if (body.nombre === undefined) {
-        res.status(400).json({
-            ok: false,
-            mensaje: 'ELNOMBRE ES NECESARIO'
-        });
-    } else {
-
-        res.json({
-            persona: body
-        });
-
-
-    }
-
-});
-
-app.put('/usuario/:id', function(req, res) {
-
-    let id = req.params.id;
-
-    res.json({
-        id
-    });
-
-});
-
-app.delete('/usuario', function(req, res) {
-    res.json('delet usurio');
-});
 
 app.listen(process.env.PORT, () => {
 
