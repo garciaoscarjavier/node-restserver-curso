@@ -17,7 +17,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
-app.use(require('./routes/usuario'));
+
+//configuracion de las rutas 
+app.use(require('./routes/index'));
+
 
 const MONGODB_URI = process.env.URLDB
 mongoose.set('useCreateIndex', true);
